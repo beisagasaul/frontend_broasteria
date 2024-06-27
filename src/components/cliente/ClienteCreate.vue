@@ -33,15 +33,7 @@ function goBack() {
 
 <template>
   <div class="container">
-    <nav aria-label="breadcrumb">
-      <ol class="breadcrumb">
-        <li class="breadcrumb-item"><RouterLink to="/">Inicio</RouterLink></li>
-        <li class="breadcrumb-item">
-          <RouterLink to="/clientes">Clientes</RouterLink>
-        </li>
-        <li class="breadcrumb-item active" aria-current="page">Crear</li>
-      </ol>
-    </nav>
+   
 
     <div class="row">
       <h2>Crear Nuevo Cliente</h2>
@@ -49,67 +41,47 @@ function goBack() {
 
     <div class="row">
 
-      <form @submit.prevent="crearCliente">
-
-        <div class="form-floating mb-3">
-          <input type="text" 
-          class="form-control"
-           v-model="nombres" 
-           placeholder="Nombre"
-            required />
-          <label for="nombres">Nombre</label>
+       <form @submit.prevent="crearCliente">
+        <div class="row mb-3">
+          <div class="col-md-6">
+            <div class="form-floating">
+              <input type="text" class="form-control" v-model="nombres" placeholder="Nombre" required />
+              <label for="nombres">Nombre</label>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="form-floating">
+              <input type="text" class="form-control" v-model="apellidos" placeholder="Apellido" required />
+              <label for="apellidos">Apellido</label>
+            </div>
+          </div>
         </div>
-
-
-        <div class="form-floating">
-          <input
-            type="text"
-            class="form-control"
-            v-model="apellidos"
-            placeholder="Apellido"
-            required
-          />
-          <label for="apellidos">Apellido</label>
+        <div class="row mb-3">
+          <div class="col-md-6">
+            <div class="form-floating">
+              <input type="text" class="form-control" v-model="direccion" placeholder="Direccion" required />
+              <label for="direccion">Direccion</label>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="form-floating">
+              <input type="text" class="form-control" v-model="telefono" placeholder="Telefono" required />
+              <label for="telefono">Teléfono</label>
+            </div>
+          </div>
         </div>
-
-
-        <div class="form-floating">
-          <input
-            type="text"
-            class="form-control"
-            v-model="direccion"
-            placeholder="Direccion"
-            required
-          />
-          <label for="direccion">Direccion</label>
+        <div class="row mb-3">
+          <div class="col-md-6">
+            <div class="form-floating">
+              <input type="text" class="form-control" v-model="email" placeholder="Email" required />
+              <label for="email">E-mail</label>
+            </div>
+          </div>
         </div>
-
-        <div class="form-floating">
-          <input
-            type="text"
-            class="form-control"
-            v-model="telefono"
-            placeholder="Telefono"
-            required
-          />
-          <label for="telefono">Teléfono</label>
-        </div>
-
-        <div class="form-floating">
-          <input
-            type="text"
-            class="form-control"
-            v-model="email"
-            placeholder="Email"
-            required
-          />
-          <label for="email">E-mail</label>
-        </div>
-
-		
         <div class="text-center mt-3">
           <button type="submit" class="btn btn-primary btn-lg">
-            <font-awesome-icon icon="fa-solid fa-save" title="Guardar" /> </button>
+            <font-awesome-icon icon="fa-solid fa-save" title="Guardar" />Registrar Cliente
+          </button>
         </div>
       </form>
     </div>
@@ -119,4 +91,44 @@ function goBack() {
   </div>
 </template>
 
-<style></style>
+<style scoped>
+.container {
+  padding: 20px;
+}
+
+button {
+  margin-top: 10px;
+}
+
+/* Estilo para las casillas de ingreso */
+.form-control {
+  background-color: #a9a9a9; /* Color plomo oscuro */
+  color: #000000; /* Letras negras */
+  max-width: 100%; /* Ancho máximo para las casillas de ingreso */
+}
+
+/* Estilo para las etiquetas */
+.form-floating > label {
+  color: #000000; /* Letras negras */
+}
+
+/* Estilo para las filas del formulario */
+.row.mb-3 {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+/* Estilo para las columnas del formulario */
+.col-md-6 {
+  flex: 1;
+  min-width: 200px; /* Ancho mínimo para las columnas */
+}
+
+/* Ajustar el tamaño de la casilla de selección */
+.form-select {
+  background-color: #a9a9a9; /* Color plomo oscuro */
+  color: #000000; /* Letras negras */
+  max-width: 400px; /* Ancho máximo para la casilla de selección */
+}
+</style>

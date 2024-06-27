@@ -9,13 +9,35 @@ const props = defineProps<{
 
 const ENDPOINT = props.ENDPOINT_API ?? "";
 const nombre = ref("");
+const categorias = ref<string[]>([]);
+
+// Fetch existing categories
+async function fetchCategorias() {
+  try {
+    const response = await http.get(ENDPOINT);
+    categorias.value = response.data.map((categoria: { nombre: string }) => categoria.nombre);
+  } catch (error) {
+    console.error("Error fetching categories", error);
+  }
+}
+
+// Call fetchCategorias when the component is mounted
+fetchCategorias();
 
 async function crearCategoria() {
-  await http
-    .post(ENDPOINT, {
+  if (categorias.value.includes(nombre.value)) {
+    alert('La categoría ya existe');
+    return;
+  }
+
+  try {
+    await http.post(ENDPOINT, {
       nombre: nombre.value,
-    })
-    .then(() => router.push("/categorias"));
+    });
+    router.push("/categorias");
+  } catch (error) {
+    console.error("Error creating category", error);
+  }
 }
 
 function goBack() {
@@ -25,18 +47,8 @@ function goBack() {
 
 <template>
   <div class="container">
-    <nav aria-label="breadcrumb">
-      <ol class="breadcrumb">
-        <li class="breadcrumb-item"><RouterLink to="/">Inicio</RouterLink></li>
-        <li class="breadcrumb-item">
-          <RouterLink to="/categorias">Categorias</RouterLink>
-        </li>
-        <li class="breadcrumb-item active" aria-current="page">Crear</li>
-      </ol>
-    </nav>
-
     <div class="row">
-      <h2>Crear Nueva Categoria</h2>
+      <h2>Agregar Nueva Categoria</h2>
     </div>
 
     <div class="row">

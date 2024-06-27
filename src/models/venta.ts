@@ -4,4 +4,5 @@ export interface Venta {
   id: number;
   totalVenta: string ;
   cliente: Cliente;
+  fechaCreacion: Date;
 }

@@ -41,15 +41,7 @@ onMounted(() => {
 
 <template>
   <div class="container">
-    <nav aria-label="breadcrumb">
-      <ol class="breadcrumb">
-        <li class="breadcrumb-item"><RouterLink to="/">Inicio</RouterLink></li>
-        <li class="breadcrumb-item">
-          <RouterLink to="/usuarios">Usuario</RouterLink>
-        </li>
-        <li class="breadcrumb-item active" aria-current="page">Editar</li>
-      </ol>
-    </nav>
+   
 
     <div class="row">
       <h2>Editar Usuario</h2>

@@ -33,12 +33,7 @@ onMounted(() => {
 
 <template>
   <div class="container">
-    <nav aria-label="breadcrumb">
-      <ol class="breadcrumb">
-        <li class="breadcrumb-item"><RouterLink to="/">Inicio</RouterLink></li>
-        <li class="breadcrumb-item active" aria-current="page">Usuarios</li>
-      </ol>
-    </nav>
+   
 
     <div class="row">
       <h2>Lista de Usuarios</h2>
@@ -82,4 +77,18 @@ onMounted(() => {
   </div>
 </template>
 
-<style scoped></style>
+<style scoped>
+.table th{
+   background-color: #a9a9a9; /* Color plomo */
+  border: 1px solid #000000; /* Bordes negros */
+}
+.table td {
+  background-color:rgba(78,115,223); /* Color plomo */
+  border: 1px solid #000000; /* Bordes negros */
+}
+
+
+.table td {
+  color: #333; /* Texto oscuro para las celdas */
+}
+</style>

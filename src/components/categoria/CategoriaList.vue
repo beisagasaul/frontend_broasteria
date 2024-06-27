@@ -36,18 +36,13 @@ onMounted(() => {
 
 <template>
   <div class="container">
-    <nav aria-label="breadcrumb">
-      <ol class="breadcrumb">
-        <li class="breadcrumb-item"><RouterLink to="/">Inicio</RouterLink></li>
-        <li class="breadcrumb-item active" aria-current="page">categorias</li>
-      </ol>
-    </nav>
+   
 
     <div class="row">
-      <h2>Lista de Categorias</h2>
+      <h2>Categorias</h2>
       <div class="col-12">
         <RouterLink to="/categorias/crear"
-        ><font-awesome-icon icon="fa-solid fa-plus" title="Crear Nuevo" /></RouterLink>
+        ><font-awesome-icon icon="fa-solid fa-plus" title="Agregar Nueva Categoria" /></RouterLink>
       </div>
     </div>
 
@@ -86,4 +81,19 @@ onMounted(() => {
 </template>
 
 
-<style scoped></style>
+
+<style scoped>
+.table th{
+   background-color: #a9a9a9; /* Color plomo */
+  border: 1px solid #000000; /* Bordes negros */
+}
+.table td {
+  background-color:rgba(78,115,223); /* Color plomo */
+  border: 1px solid #000000; /* Bordes negros */
+}
+
+
+.table td {
+  color: #333; /* Texto oscuro para las celdas */
+}
+</style>

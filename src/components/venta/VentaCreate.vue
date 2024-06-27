@@ -83,6 +83,7 @@ function goBack() {
           <label for="cliente">Cliente</label>
         </div>
 
+   <div class="col-md-6">
         <div class="form-floating mb-3">
           <input
             type="text"
@@ -93,6 +94,7 @@ function goBack() {
           />
           <label for="totalVenta">Total de Venta</label>
         </div>
+</div>
 
         <div class="text-center mt-3">
           <button type="submit" class="btn btn-primary btn-lg">
@@ -114,5 +116,37 @@ function goBack() {
 
 button {
   margin-top: 10px;
+}
+
+/* Estilo para las casillas de ingreso */
+.form-control {
+  background-color: #a9a9a9; /* Color plomo oscuro */
+  color: #000000; /* Letras negras */
+  max-width: 100%; /* Ancho máximo para las casillas de ingreso */
+}
+
+/* Estilo para las etiquetas */
+.form-floating > label {
+  color: #000000; /* Letras negras */
+}
+
+/* Estilo para las filas del formulario */
+.row.mb-3 {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+/* Estilo para las columnas del formulario */
+.col-md-6 {
+  flex: 1;
+  min-width: 400px; /* Ancho mínimo para las columnas */
+}
+
+/* Ajustar el tamaño de la casilla de selección */
+.form-select {
+  background-color: #a9a9a9; /* Color plomo oscuro */
+  color: #000000; /* Letras negras */
+  max-width: 400px; /* Ancho máximo para la casilla de selección */
 }
 </style>

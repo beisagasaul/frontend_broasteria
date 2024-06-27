@@ -34,12 +34,7 @@ onMounted(() => {
 
 <template>
   <div class="container">
-    <nav aria-label="breadcrumb">
-      <ol class="breadcrumb">
-        <li class="breadcrumb-item"><RouterLink to="/">Inicio</RouterLink></li>
-        <li class="breadcrumb-item active" aria-current="page">Clientes</li>
-      </ol>
-    </nav>
+ 
 
     <div class="row">
       <h2>Lista de Clientes</h2>
@@ -79,8 +74,8 @@ onMounted(() => {
 
 
 
-              <button class="btn btn-link" @click="toDelete(cliente.id)"
-              ><font-awesome-icon icon="fa-solid fa-trash" title="Elimnar" /></button>
+              <!-- <button class="btn btn-link" @click="toDelete(cliente.id)"
+              ><font-awesome-icon icon="fa-solid fa-trash" title="Elimnar" /></button> -->
             </td>
 
           </tr>
@@ -91,4 +86,18 @@ onMounted(() => {
 </template>
 
 
-<style scoped></style>
+<style scoped>
+.table th{
+   background-color: #a9a9a9; /* Color plomo */
+  border: 1px solid #000000; /* Bordes negros */
+}
+.table td {
+  background-color:rgba(78,115,223); /* Color plomo */
+  border: 1px solid #000000; /* Bordes negros */
+}
+
+
+.table td {
+  color: #333; /* Texto oscuro para las celdas */
+}
+</style>
