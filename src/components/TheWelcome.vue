@@ -54,7 +54,7 @@ const authStore = useAuthStore();
           <div class="bg-white py-2 collapse-inner rounded">
             <h6 class="collapse-header">Gestión de Ventas:</h6>
             <RouterLink to="/ventas" class="collapse-item">Venta</RouterLink>
-            <a class="collapse-item" href="buttons.html">Detalles de Venta</a>
+            <RouterLink to="/ventadetalles" class="collapse-item">Detalles de Venta</RouterLink>
           </div>
         </div>
       </li>
@@ -79,8 +79,8 @@ const authStore = useAuthStore();
         >
           <div class="bg-white py-2 collapse-inner rounded">
             <h6 class="collapse-header">Gestion de Productos:</h6>
-            <a class="collapse-item" href="utilities-color.html">Producto</a>
-            <a class="collapse-item" href="utilities-border.html">Categoria</a>
+             <RouterLink to="/productos" class="collapse-item">Producto</RouterLink>
+              <RouterLink to="/categorias" class="collapse-item">Categoria</RouterLink>
           </div>
         </div>
       </li>
@@ -104,8 +104,8 @@ const authStore = useAuthStore();
         >
           <div class="bg-white py-2 collapse-inner rounded">
             <h6 class="collapse-header">Gestión del Personal:</h6>
-            <a class="collapse-item" href="login.html">Registrar Empleado </a>
-            <a class="collapse-item" href="register.html">Historial de Empleado</a>
+            <RouterLink to="/usuarios" class="collapse-item">Usuario</RouterLink>
+            <RouterLink to="/empleados" class="collapse-item">Empleado</RouterLink>
           </div>
         </div>
       </li>
@@ -113,7 +113,7 @@ const authStore = useAuthStore();
       <li class="nav-item">
         <a class="nav-link" href="tables.html">
           <i class="fas fa-fw fa-users"></i>
-          <span>Consulta de Clientes</span></a
+          <span> Cliente</span></a
         >
       </li>
     </ul>

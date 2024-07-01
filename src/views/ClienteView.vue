@@ -111,8 +111,8 @@ const authStore = useAuthStore();
                 <div class="bg-white py-2 collapse-inner rounded">
                   <h6 class="collapse-header">Gestión del Personal:</h6>
 
-                  <RouterLink to="/usuarios" class="collapse-item">Historial de Usuarios</RouterLink>
-                  <RouterLink to="/empleados" class="collapse-item">Historial de Empleado</RouterLink>
+                  <RouterLink to="/usuarios" class="collapse-item">Usuario</RouterLink>
+                  <RouterLink to="/empleados" class="collapse-item">Empleado</RouterLink>
                 </div>
               </div>
             </li>
@@ -120,7 +120,7 @@ const authStore = useAuthStore();
             <li class="nav-item">
               <RouterLink to="/clientes" class="nav-link">
                 <i class="fas fa-fw fa-users"></i>
-                <span>Consulta de Clientes</span>
+                <span>Cliente</span>
               </RouterLink>
             </li>
           </ul>
