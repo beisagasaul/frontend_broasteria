@@ -1,4 +1,3 @@
-
 <script setup lang="ts">
 import { ref, onMounted, watch } from 'vue';
 import http from '@/plugins/axios';
@@ -22,6 +21,7 @@ const detallesVenta = ref<Array<{
 
 const props = defineProps<{
   ENDPOINT_API: string;
+  empleadoId: number;
 }>();
 
 const router = useRouter();
@@ -30,6 +30,10 @@ const crearClienteModal = ref<boolean>(false);
 
 const nombres = ref('');
 const apellidos = ref('');
+const direccion = ref('');
+const telefono = ref('');
+const email = ref('');
+const dineroRecibido = ref<number>(0);
 const fechaCreacion = ref(new Date().toISOString().substring(0, 10)); // Campo para la fecha de la transacción
 
 async function getClientes() {
@@ -67,64 +71,64 @@ watch(detallesVenta, async (detalles) => {
   for (let i = 0; i < detalles.length; i++) {
     const detalle = detalles[i];
     if (detalle.idProducto) {
-      try {
-        const producto = await http.get(`productos/${detalle.idProducto}`).then(response => response.data);
-        detalle.stock = producto.stock - detalle.cantidad;
-        detalle.precioUnitario = producto.precio;
-        detalle.totalVenta = Number(((detalle.cantidad * detalle.precioUnitario) * (1 - detalle.descuento / 100)).toFixed(2));
-      } catch (error) {
-        console.error(`Error al obtener el producto ${detalle.idProducto}:`, error);
+      const producto = productos.value.find(p => p.id === detalle.idProducto);
+      if (producto) {
+        detalle.precioUnitario = producto.precioUnitario;
+        detalle.totalVenta = detalle.cantidad * detalle.precioUnitario;
+        detalle.stock = producto.stock;
       }
     }
   }
 }, { deep: true });
 
 async function crearDetalles() {
-  try {
-    const ventaDetalles = detallesVenta.value.map(detalle => ({
-      ...detalle,
-      idCliente: selectedClienteId.value,
-      fechaCreacion: fechaCreacion.value
-    }));
-
-    await Promise.all(
-      ventaDetalles.map(async (detalle) => {
-        await http.post(props.ENDPOINT_API, detalle);
-      })
-    );
-    router.push('/detalles');
-  } catch (error) {
-    console.error('Error al crear los detalles de venta:', error);
-  }
-}
-
-async function crearCliente() {
-  try {
-    const response = await http.post('clientes', { nombres: nombres.value, 
-    apellidos: apellidos.value,direccion:direccion.value,
-     telefono: telefono.value,
-     email: email.value });
-    console.log('Respuesta del servidor:', response);
-    await getClientes(); // Actualiza la lista de clientes
-    selectedClienteId.value = response.data.id; // Selecciona automáticamente el nuevo cliente
-    crearClienteModal.value = false; // Cierra el modal
-  } catch (error) {
-    console.error('Error al crear cliente:', error);
-    alert('Hubo un error al crear el cliente. Por favor, inténtalo de nuevo.');
-  }
+  const data = {
+    clienteId: selectedClienteId.value,
+    empleadoId: props.empleadoId,
+    detallesVenta: detallesVenta.value,
+    fechaCreacion: fechaCreacion.value // Añadir la fecha a los detalles de la venta
+  };
+  await http.post(`${props.ENDPOINT_API}/detalles`, data).then((response) => {
+    console.log(response);
+  }).catch((error) => {
+    console.error(error);
+  });
 }
 
 function goBack() {
   router.go(-1);
 }
-</script>
 
+function calcularTotalVenta() {
+  return detallesVenta.value.reduce((total, detalle) => total + detalle.totalVenta, 0).toFixed(2);
+}
+
+function calcularCambio() {
+  const totalVenta = parseFloat(calcularTotalVenta());
+  return (dineroRecibido.value - totalVenta).toFixed(2);
+}
+
+function crearCliente() {
+  const nuevoCliente = {
+    nombres: nombres.value,
+    apellidos: apellidos.value,
+    direccion: direccion.value,
+    telefono: telefono.value,
+    email: email.value
+  };
+  http.post('clientes', nuevoCliente).then(() => {
+    crearClienteModal.value = false;
+    getClientes(); // Recargar la lista de clientes después de agregar uno nuevo
+  }).catch((error) => {
+    console.error(error);
+  });
+}
+</script>
 
 
 
 <template>
   <div class="container">
-
     <div class="row">
       <div class="col-12 text-center mt-3 mb-3">
         <h2 class="simpsons-font">Nueva Venta</h2>
@@ -142,20 +146,16 @@ function goBack() {
           <label for="cliente">Cliente</label>
           <button type="button" class="btn btn-link" @click="crearClienteModal = true">Registrar Cliente</button>
         </div>
-        
-       
+
         <div v-for="(detalle, index) in detallesVenta" :key="index" class="row align-items-center">
           <div class="col">
             <div class="form-floating mb-3">
               <select v-model="detalle.idProducto" class="form-select" required>
                 <option v-for="producto in productos" :value="producto.id" :key="producto.id">
-                  {{ producto.nombre }}
+                  {{ producto.nombre }}__(Bs.){{ producto.precioUnitario }}
                 </option>
               </select>
               <label for="producto">Producto</label>
-            </div>
-            <div v-if="detalle.descripcion" class="floating-info mb-3">
-              <p>{{ detalle.descripcion }}</p>
             </div>
             <div v-if="detalle.stock !== undefined" class="floating-info mb-3">
               <p>Stock: {{ detalle.stock }} <i class="fas fa-box"></i></p>
@@ -169,24 +169,18 @@ function goBack() {
           </div>
           <div class="col">
             <div class="form-floating mb-3">
-              <input type="number" class="form-control" v-model="detalle.precioUnitario" placeholder="PrecioUnitario"
-                step="0.01" required />
-              <label for="precioUnitario">Precio por Unidad</label>
+              <input type="number" class="form-control" :value="detalle.precioUnitario" placeholder="Precio Unitario"
+                step="0.01" readonly />
+              <label for="precioUnitario">Precio por Unidad (Bs.)</label>
             </div>
           </div>
-          <div class="col">
-            <div class="form-floating mb-3">
-              <input type="number" class="form-control" v-model="detalle.descuento" placeholder="Descuento (%)" min="0"
-                required />
-              <label for="descuento">Descuento (%)</label>
-            </div>
-          </div>
+
           <div class="col">
             <div class="form-floating mb-3">
               <input type="text" class="form-control"
                 :value="detalle.totalVenta.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })"
-                placeholder="totalVenta" required readonly />
-              <label for="totalVenta">Total de Venta</label>
+                placeholder="totalVenta" readonly />
+              <label for="totalVenta">Total  (Bs.)</label>
             </div>
           </div>
         </div>
@@ -194,22 +188,37 @@ function goBack() {
         <div class="text-center mt-3">
           <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
             <div class="btn-group me-2" role="group" aria-label="First group">
-              <button type="button" class="btn btn-primary btn-lg" @click="agregarDetalle">
-                Agregar Venta
+              <button type="button" class="btn btn-primary btn-lg" @click="agregarDetalle" :disabled="!selectedClienteId">
+                Agregar Producto
               </button>
             </div>
             <div class="btn-group" role="group" aria-label="Second group">
-              <button type="submit" class="btn btn-primary btn-lg">Guardar Venta</button>
             </div>
           </div>
-          <button class="btn btn-primary btn-lg" @click.prevent="mostrarTotalVenta">
-            Total a Pagar
-          </button>
+        </div>
+
+        <!-- Sección para mostrar el total de la venta y calcular el cambio -->
+        <div class="text-center mt-3 col-md-6">
+          <div class="form-floating mb-3">
+            <input type="text" class="form-control" :value="calcularTotalVenta()" placeholder="Total de Venta" readonly />
+            <label for="totalVenta">Total (Bs.)</label>
+          </div>
+          <div class="form-floating mb-3">
+            <input type="number" class="form-control" v-model.number="dineroRecibido" placeholder="Dinero Recibido" />
+            <label for="dineroRecibido">Dinero Recibido (Bs.)</label>
+          </div>
+          <div class="form-floating mb-3">
+            <input type="text" class="form-control" :value="calcularCambio()" placeholder="Cambio" readonly />
+            <label for="cambio">Cambio (Bs.)</label>
+          </div>
         </div>
       </form>
     </div>
     <div class="text-left">
-      <button class="btn btn-link" @click="goBack">Volver</button>
+      <button type="submit" class="btn btn-primary btn-lg guardar" :disabled="!selectedClienteId">Guardar Venta</button>
+     
+      <button class="btn btn-link" @click="goBack"  >  </button>
+      <button type="submit" class="btn btn-primary btn-lg cancelar"@click="goBack">Cancelar Venta</button>
     </div>
 
     <!-- Modal para crear nuevo cliente -->
@@ -226,52 +235,41 @@ function goBack() {
               <label for="nombre">Nombres</label>
             </div>
             <div class="form-floating mb-3">
-              <input type="text" class="form-control" id="apellido" v-model="apellidos" placeholder="Apellido"
-                required />
+              <input type="text" class="form-control" id="apellido" v-model="apellidos" placeholder="Apellido" required />
               <label for="apellido">Apellidos</label>
             </div>
             <div class="form-floating mb-3">
-              <input type="text" class="form-control" id="direccion" v-model="direccion"
-                placeholder="Dirección" maxlength="20" required />
+              <input type="text" class="form-control" id="direccion" v-model="direccion" placeholder="Dirección" maxlength="20" required />
               <label for="direccion">Dirección</label>
             </div>
 
             <div class="form-floating mb-3">
-              <input type="text" class="form-control" id="telefono" v-model="telefono"
-                placeholder="Teléfono" maxlength="20" required />
+              <input type="text" class="form-control" id="telefono" v-model="telefono" placeholder="Teléfono" maxlength="20" required />
               <label for="telefono">Numero de Celular</label>
             </div>
 
             <div class="form-floating mb-3">
-              <input type="text" class="form-control" id="email" v-model="email"
-                placeholder="E-Mail" maxlength="20" required />
+              <input type="text" class="form-control" id="email" v-model="email" placeholder="E-Mail" maxlength="20" required />
               <label for="email">E-mail</label>
             </div>
-
-          
-
-
-
-
-
-
-
-
-
-
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" @click="crearClienteModal = false">Cancelar</button>
-            <button type="button" class="btn btn-primary" @click="crearCliente">Crear</button>
+            
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" @click="crearClienteModal = false">Cancelar</button>
+              <button type="button" class="btn btn-primary" @click="crearCliente">Crear Cliente</button>
+            </div>
           </div>
         </div>
       </div>
     </div>
   </div>
 </template>
-<style>
-/* ... estilos existentes ... */
 
+<style>
+/* Estilo para las columnas del formulario */
+.col-md-6 {
+  flex: 1;
+  min-width: 200px; /* Ancho mínimo para las columnas */
+}
 /* Estilos para el modal */
 .modal.fade.show {
   background-color: rgba(0, 0, 0, 0.5);
@@ -280,5 +278,34 @@ function goBack() {
 .modal-dialog {
   max-width: 500px;
   margin: 1.75rem auto;
+}
+
+.cancelar {
+  background-color: red;
+  border-color: red;
+  color: white; /* Cambia el color del texto a blanco para mayor contraste */
+}
+
+.cancelar:hover {
+  background-color: darkred; /* Color más oscuro al pasar el mouse */
+  border-color: darkred;
+}
+
+.guardar {
+  background-color: green;
+  border-color: green;
+  color: white; /* Cambia el color del texto a blanco para mayor contraste */
+}
+
+.guardar:hover {
+  background-color: darkgreen; /* Color más oscuro al pasar el mouse */
+  border-color: darkgreen;
+}
+
+/* Ajustar el tamaño de la casilla de selección */
+.form-select {
+  background-color: #a9a9a9; /* Color plomo oscuro */
+  color: #000000; /* Letras negras */
+  max-width: 4500px; /* Ancho máximo para la casilla de selección */
 }
 </style>
