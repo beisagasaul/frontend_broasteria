@@ -186,6 +186,6 @@ button {
 .form-select {
   background-color: #a9a9a9; /* Color plomo oscuro */
   color: #000000; /* Letras negras */
-  max-width: 400px; /* Ancho máximo para la casilla de selección */
+  max-width: 200px; /* Ancho máximo para la casilla de selección */
 }
 </style>
