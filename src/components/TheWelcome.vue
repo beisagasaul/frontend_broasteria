@@ -1,7 +1,9 @@
 <script setup lang="ts">
 import { RouterLink, RouterView } from "vue-router";
+ import HelloWorld from '@/components/HelloWorld.vue';
 import { useAuthStore } from "@/stores/index";
 const authStore = useAuthStore();
+
 </script>
 
 <template>
@@ -84,7 +86,7 @@ const authStore = useAuthStore();
           </div>
         </div>
       </li>
-      <li class="nav-item">
+      <li class="nav-item" v-if="authStore.user == 'saulbeisaga'">
         <a
           class="nav-link collapsed"
           href="#"
@@ -127,7 +129,7 @@ const authStore = useAuthStore();
             @click="authStore.logout()"
             class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"
           >
-            <i class="fas fa-download fa-sm text-white-50"></i> Cerrar Sesión
+              <i class="fas fa-sign-out-alt fa-sm text-white-50"></i> Cerrar Sesión
           </a>
 
           <ul class="navbar-nav ml-auto">
@@ -143,9 +145,7 @@ const authStore = useAuthStore();
                 aria-haspopup="true"
                 aria-expanded="false"
               >
-                <span class="mr-2 d-none d-lg-inline text-gray-600 small"
-                  >beisagasaul</span
-                >
+                <span class="mr-2 d-none d-lg-inline text-gray-600 small"><HelloWorld :msg="'BIENVENIDO ' + (authStore.user ? '-' + authStore.user : '')" /></span>
               </a>
               <div
                 class="dropdown-menu dropdown-menu-right shadow animated--grow-in"

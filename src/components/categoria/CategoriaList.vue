@@ -52,7 +52,7 @@ onMounted(() => {
           <tr>
             <th scope="col">N°</th>
             <th scope="col">Nombre</th>
-            <th scope="col">Acciones</th>
+            <th scope="col">Acción</th>
           </tr>
         </thead>
         
@@ -95,5 +95,8 @@ onMounted(() => {
 
 .table td {
   color: #333; /* Texto oscuro para las celdas */
+}
+.btn{
+  color :white;
 }
 </style>

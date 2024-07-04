@@ -1,9 +1,7 @@
-
 <script setup lang="ts">
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { useAuthStore } from '@/stores/index';
-import $ from 'jquery';
 import Swal from 'sweetalert2';
 
 const nombreUsuario = ref('');
@@ -12,8 +10,8 @@ const error = ref(false);
 const router = useRouter();
 
 async function onSubmit() {
-  const usuario: string = $.trim(nombreUsuario.value);
-  const password: string = $.trim(clave.value);
+  const usuario: string = nombreUsuario.value.trim();
+  const password: string = clave.value.trim();
 
   if (usuario.length === 0 || password.length === 0) {
     Swal.fire({
@@ -26,30 +24,25 @@ async function onSubmit() {
   const authStore = useAuthStore();
   try {
     const response: any = await authStore.login(usuario, password);
-      Swal.fire({
-        icon: 'success',
-        title: '¡Conexión exitosa!',
-        confirmButtonColor: '#3085d6',
-        confirmButtonText: 'Ingresar'
-      }).then((result) => {
-        if (result.isConfirmed) {
-          router.push('/');
-        }
-      });
-    
+    Swal.fire({
+      icon: 'success',
+      title: '¡Conexión exitosa!',
+      confirmButtonColor: '#3085d6',
+      confirmButtonText: 'Ingresar'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        router.push('/'); // Asegúrate de que esta es la ruta correcta
+      }
+    });
   } catch (error) {
-    console.error('Error during login:', error);
+    console.error('Error durante el inicio de sesión:', error);
     Swal.fire({
       icon: 'error',
-      title:  'Usuario y/o password incorrecta'
+      title: 'Usuario y/o password incorrecta'
     });
   }
 }
-
 </script>
-
-
-
 
 <template>
   <div class="container-login">
@@ -73,11 +66,11 @@ async function onSubmit() {
             <button type="submit" class="login-form-btn">CONECTAR</button>
           </div>
         </div>
-        
       </form>
     </div>
   </div>
 </template>
+
 
 <style>
 @font-face {

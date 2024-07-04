@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { RouterLink, RouterView } from "vue-router";
+import HelloWorld from '@/components/HelloWorld.vue';
 import { useAuthStore } from "@/stores/index";
 const authStore = useAuthStore();
 </script>
@@ -90,7 +91,7 @@ const authStore = useAuthStore();
               </div>
             </li>
 
-            <li class="nav-item">
+            <li class="nav-item" v-if="authStore.user == 'saulbeisaga'">
               <a
                 class="nav-link collapsed"
                 href="#"
@@ -152,7 +153,8 @@ const authStore = useAuthStore();
                       aria-expanded="false"
                     >
                       <span class="mr-2 d-none d-lg-inline text-gray-600 small"
-                        >beisagasaul</span
+                        >   <HelloWorld :msg="'BIENVENIDO ' + (authStore.user ? '-' + authStore.user : '')" />
+                       </span
                       >
                     </a>
 

@@ -53,8 +53,8 @@ onMounted(() => {
             <th scope="col">Apellidos</th>
             <th scope="col">Direccion</th>
              <th scope="col">Teléfono</th>
-             <th scope="col">Email</th>
-            <th scope="col">Acciones</th>
+             <th scope="col">E-mail</th>
+            <th scope="col">Acción</th>
           </tr>
         </thead>
         
@@ -87,6 +87,10 @@ onMounted(() => {
 
 
 <style scoped>
+
+.btn {
+  color:white;
+}
 .table th{
    background-color: #a9a9a9; /* Color plomo */
   border: 1px solid #000000; /* Bordes negros */

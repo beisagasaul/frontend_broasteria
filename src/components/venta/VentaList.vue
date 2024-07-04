@@ -78,13 +78,12 @@ onMounted(() => {
       <div class="col-12 text-center">
         <div class="row">
           <div class="col-12 text-center mt-3 mb-3">
-            <router-link to="/ventas/crear" class="btn btn-primary btn-lg animate__animated animate__pulse">
+            <router-link to="/ventas/crear" class="btn btn-primary venta">
             
-              Generar Venta
+              Generar Nueva Venta
             </router-link>
           </div>
           <div class="col-12 text-center mt-3 mb-3">
-        <h3 style="font-family: 'Comic Sans MS', cursive;">Ventas Realizadas</h3>
       </div>
         </div>
       </div>
@@ -102,7 +101,6 @@ onMounted(() => {
             <th scope="col">Total de Venta (Bs.)</th>
             <th scope="col">Registrado por :</th>
             <th scope="col">Fecha de Registro</th>
-            <th scope="col">Acción</th>
           </tr>
         </thead>
         <tbody>
@@ -115,13 +113,7 @@ onMounted(() => {
               <td>{{ venta.totalVenta }}</td>
             <td>{{ venta.empleado?.nombres }} {{ venta.empleado?.apellidos }}</td>
             <td>{{ formatDate(venta.fechaCreacion) }}</td>
-            <td>
-              <button class="btn btn-link" @click="toEdit(venta.id)">
-              <font-awesome-icon icon="fa-solid fa-edit" title="Editar" />
-              </button>
-              <button class="btn btn-link" @click="toDelete(venta.id)"
-              ><font-awesome-icon icon="fa-solid fa-trash" title="Elimnar" /></button>
-            </td>
+           
           </tr>
         </tbody>
       </table>
@@ -147,6 +139,17 @@ onMounted(() => {
 
 .table td {
   color: black; /* Texto oscuro para las celdas */
+}
+
+.venta {
+  background-color: green;
+  border-color: green;
+  color: white; /* Cambia el color del texto a blanco para mayor contraste */
+}
+
+.venta:hover {
+  background-color:  green; /* Color más oscuro al pasar el mouse */
+  border-color:   green;
 }
 
 </style>

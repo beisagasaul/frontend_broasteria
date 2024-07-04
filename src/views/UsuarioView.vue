@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { RouterLink, RouterView } from "vue-router";
+import HelloWorld from '@/components/HelloWorld.vue';
 import { useAuthStore } from "@/stores/index";
 const authStore = useAuthStore();
 </script>
@@ -135,7 +136,7 @@ const authStore = useAuthStore();
                   href="#"
                   class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"
                 >
-                  <i class="fas fa-download fa-sm text-white-50"></i> Cerrar Sesión
+                   <i class="fas fa-sign-out-alt fa-sm text-white-50"></i>  Cerrar Sesión
                 </a>
                 <ul class="navbar-nav ml-auto">
                   <div class="topbar-divider d-none d-sm-block"></div>
@@ -151,7 +152,8 @@ const authStore = useAuthStore();
                       aria-expanded="false"
                     >
                       <span class="mr-2 d-none d-lg-inline text-gray-600 small"
-                        >beisagasaul</span
+                        >   <HelloWorld :msg="'BIENVENIDO ' + (authStore.user ? '-' + authStore.user : '')" />
+</span
                       >
                     </a>
 

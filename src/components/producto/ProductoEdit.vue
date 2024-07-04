@@ -39,7 +39,7 @@ async function cargarProducto() {
 
 async function actualizarProducto() {
   try {
-    await http.patch(`${ENDPOINT}/${venta.value.id}`, {
+    await http.patch(`${ENDPOINT}/${producto.value.id}`, {
      idCategoria: producto.value.categoria.id,
      nombre: producto.value.nombre,
      descripcion: producto.value.descripcion,
@@ -48,7 +48,7 @@ async function actualizarProducto() {
     });
     router.push("/productos");
   } catch (error) {
-    console.error("Error al actualizar el prducto:", error);
+    console.error("Error al actualizar el producto:", error);
   }
 }
 
@@ -57,7 +57,7 @@ async function getCategorias() {
     const response = await http.get('categorias');
     categorias.value = response.data;
   } catch (error) {
-    console.error("Error al obtener los categorias:", error);
+    console.error("Error al obtener las categorías:", error);
   }
 }
 
@@ -72,11 +72,9 @@ function goBack() {
 </script>
 
 <template>
-  <div class="container" v-if="venta && venta.cliente">
-   
-
+  <div class="container">
     <div class="row">
-      <h2>Editar Venta</h2>
+      <h2>Editar Producto</h2>
     </div>
 
     <div class="row">
@@ -84,18 +82,18 @@ function goBack() {
         <div class="form-floating mb-3">
           <select
             class="form-select"
-            v-model="producto.categoria"
+            v-model="producto.categoria.id"
             required
           >
-            <option value="" disabled>Seleccione una categoria</option>
-            <option v-for="categoria in categorias" :key="categoria.id" :value="categoria">
+            <option value="" disabled>Seleccione una categoría</option>
+            <option v-for="categoria in categorias" :key="categoria.id" :value="categoria.id">
               {{ categoria.nombre }}
             </option>
           </select>
-          <label for="categoria">Categoria</label>
+          <label for="categoria">Categoría</label>
         </div>
 
-       <div class="form-floating mb-3">
+        <div class="form-floating mb-3">
           <input
             type="text"
             class="form-control"
@@ -106,7 +104,7 @@ function goBack() {
           <label for="nombre">Nombre</label>
         </div>
 
-        <div class="form-floating mb-2">
+        <div class="form-floating mb-3">
           <input
             type="text"
             class="form-control"
@@ -117,7 +115,7 @@ function goBack() {
           <label for="descripcion">Descripción</label>
         </div>
 
-        <div class="form-floating mb-2">
+        <div class="form-floating mb-3">
           <input
             type="number"
             class="form-control"
@@ -128,7 +126,7 @@ function goBack() {
           <label for="precioUnitario">Precio Unitario</label>
         </div>
 
-        <div class="form-floating mb-2">
+        <div class="form-floating mb-3">
           <input
             type="number"
             class="form-control"
@@ -151,6 +149,7 @@ function goBack() {
     </div>
   </div>
 </template>
+
 
 <style scoped>
 .container {

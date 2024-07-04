@@ -40,7 +40,7 @@ onMounted(() => {
       <h2>Historial de Empleados</h2>
       <div class="col-12">
         <RouterLink to="/empleados/crear"
-          >
+        >Crear Nuevo Empleado
         </RouterLink>
       </div>
     </div>
@@ -56,7 +56,7 @@ onMounted(() => {
             <th scope="col">Cargo</th>
             <th scope="col">Salario</th>
             <th scope="col">Fecha de Contratación</th>
-            <th scope="col">Acciones</th>
+            <th scope="col">Acción</th>
           </tr>
         </thead>
 
@@ -87,6 +87,9 @@ onMounted(() => {
 </template>
 
 <style scoped>
+.btn{
+  color :white;
+}
 .table th{
    background-color: #a9a9a9; /* Color plomo */
   border: 1px solid #000000; /* Bordes negros */

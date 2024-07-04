@@ -9,10 +9,15 @@ const props = defineProps<{
 }>()
 
 const ENDPOINT = props.ENDPOINT_API ?? ''
-var productos = ref<Producto[]>([])
+const productos = ref<Producto[]>([])
 
 async function getProductos() {
-  productos.value = await http.get(ENDPOINT).then((response) => response.data)
+  try {
+    const response = await http.get(ENDPOINT)
+    productos.value = response.data
+  } catch (error) {
+    console.error('Error al obtener los productos:', error)
+  }
 }
 
 function toEdit(id: number) {
@@ -20,10 +25,25 @@ function toEdit(id: number) {
 }
 
 async function toDelete(id: number) {
-  var r = confirm('¿Está seguro que se desea eliminar el producto?')
-  if (r == true) {
-    await http.delete(`${ENDPOINT}/${id}`).then(() => getProductos())
+  const r = confirm('¿Está seguro que se desea eliminar el producto?')
+  if (r) {
+    try {
+      await http.delete(`${ENDPOINT}/${id}`)
+      await getProductos()
+    } catch (error) {
+      console.error('Error al eliminar el producto:', error)
+    }
   }
+}
+
+// Método para formatear la fecha
+function formatDate(dateString: string): string {
+  const date = new Date(dateString)
+  const year = date.getFullYear()
+  const month = String(date.getMonth() + 1).padStart(2, '0') // Los meses son de 0 a 11
+  const day = String(date.getDate()).padStart(2, '0')
+  
+  return `${year}-${month}-${day}`
 }
 
 onMounted(() => {
@@ -33,14 +53,12 @@ onMounted(() => {
 
 <template>
   <div class="container">
-   
-
     <div class="row">
       <h2>Productos</h2>
       <div class="col-12">
-        <RouterLink to="/productos/crear"
-          ><font-awesome-icon icon="fa-solid fa-plus" /> Agregar Nuevo Producto</RouterLink
-        >
+        <RouterLink to="/productos/crear">
+          <font-awesome-icon icon="fa-solid fa-plus" /> Agregar Nuevo Producto
+        </RouterLink>
       </div>
     </div>
 
@@ -49,23 +67,24 @@ onMounted(() => {
         <thead>
           <tr>
             <th scope="col">N°</th>
-            <th scope="col">Categoria</th>
+            <th scope="col">Categoría</th>
             <th scope="col">Nombre</th>
-            <th scope="col">Descripcion</th>
+            <th scope="col">Descripción</th>
             <th scope="col">Precio</th>
-            <th scope="col">stock</th>
-            <th scope="col">Acciones</th>
+            <th scope="col">Stock</th>
+            <th scope="col">Fecha de Creación</th>
+            <th scope="col">Acción</th>
           </tr>
         </thead>
         <tbody>
-          <tr v-for="(producto, index) in productos.values()" :key="producto.id">
+          <tr v-for="(producto, index) in productos" :key="producto.id">
             <th scope="row">{{ index + 1 }}</th>
-            <td>{{producto.categoria.nombre }}</td>
-            <td>{{producto.nombre }}</td>
-            <td>{{producto.descripcion }}</td>
-            <td>{{producto.precioUnitario }}</td>
-            <td>{{producto.stock }}</td>
-          
+            <td>{{ producto.categoria?.nombre }}</td>
+            <td>{{ producto.nombre }}</td>
+            <td>{{ producto.descripcion }}</td>
+            <td>{{ producto.precioUnitario }}</td>
+            <td>{{ producto.stock }}</td>
+            <td>{{ formatDate(producto.fechaCreacion) }}</td>
             <td>
               <button class="btn btn-link" @click="toEdit(producto.id)">
                 <font-awesome-icon icon="fa-solid fa-edit" />
@@ -81,6 +100,7 @@ onMounted(() => {
   </div>
 </template>
 
+
 <style scoped>
 .table th{
    background-color: #a9a9a9; /* Color plomo */
@@ -94,5 +114,8 @@ onMounted(() => {
 
 .table td {
   color: #333; /* Texto oscuro para las celdas */
+}
+.btn{
+  color :white;
 }
 </style>

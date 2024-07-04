@@ -1,10 +1,11 @@
 <script setup lang="ts">
-import { ref, onMounted } from "vue";
+import { ref, onMounted, defineProps } from "vue";
 import http from "@/plugins/axios";
 import router from "@/router";
 import type { Ventadetalle } from '@/models/ventadetalle';
 import type { Producto } from '@/models/producto';
 import type { Venta } from '@/models/venta';
+import type { Cliente } from '@/models/cliente'; // Asegúrate de importar el tipo Cliente si es necesario
 
 const props = defineProps<{
   ENDPOINT_API: string;
@@ -14,20 +15,27 @@ const ENDPOINT = props.ENDPOINT_API ?? "";
 
 const ventadetalle = ref<Ventadetalle>({
   id: 0,
-  cantidad: '1',
-  subtotal: '0',
+  cantidad: '', // Asegúrate que cantidad y subtotal sean números
+  subtotal: '',
   venta: {
     id: 0,
-    totalVenta: '',
+    totalVenta: 0,
+    fechaCreacion: Date,
+    cantidad:0,
+    precioUnitario: 0,
+    totalVenta: 0;
+
+
+
     cliente: {
       id: 0,
-      nombre : ''
-    }
+      nombres: ''
+    } as Cliente 
   },
   producto: {
     id: 0,
     nombre: ''
-  }
+  } as Producto // Aquí deberías tipar correctamente producto según el tipo Producto
 });
 
 const productos = ref<Producto[]>([]);
@@ -47,7 +55,7 @@ async function crearVentadetalle() {
 
 async function getProductos() {
   try {
-    const response = await http.get('productos');
+    const response = await http.get<Producto[]>('productos'); // Asegúrate de tipar correctamente la respuesta
     productos.value = response.data;
   } catch (error) {
     console.error("Error al obtener los productos:", error);
@@ -56,7 +64,7 @@ async function getProductos() {
 
 async function getVentas() {
   try {
-    const response = await http.get('ventas');
+    const response = await http.get<Venta[]>('ventas'); // Asegúrate de tipar correctamente la respuesta
     ventas.value = response.data;
   } catch (error) {
     console.error("Error al obtener las ventas:", error);
@@ -75,8 +83,6 @@ function goBack() {
 
 <template>
   <div class="container" v-if="ventadetalle && ventadetalle.producto && ventadetalle.venta">
-   
-
     <div class="row">
       <h2>Crear Nuevo Detalle de Venta</h2>
     </div>
@@ -84,25 +90,17 @@ function goBack() {
     <div class="row">
       <form @submit.prevent="crearVentadetalle">
         <div class="form-floating mb-3">
-          <select
-            class="form-select"
-            v-model="ventadetalle.venta"
-            required
-          >
+          <select class="form-select" v-model="ventadetalle.venta" required>
             <option value="" disabled>Seleccione una venta</option>
             <option v-for="venta in ventas" :key="venta.id" :value="venta">
-              Cliente- {{ venta.cliente.nombres }}
+              Cliente - {{ venta.cliente.nombres }}
             </option>
           </select>
           <label for="venta">Venta</label>
         </div>
 
         <div class="form-floating mb-3">
-          <select
-            class="form-select"
-            v-model="ventadetalle.producto"
-            required
-          >
+          <select class="form-select" v-model="ventadetalle.producto" required>
             <option value="" disabled>Seleccione un producto</option>
             <option v-for="producto in productos" :key="producto.id" :value="producto">
               {{ producto.nombre }}
@@ -112,34 +110,23 @@ function goBack() {
         </div>
 
         <div class="form-floating mb-3">
-          <input
-            type="number"
-            class="form-control"
-            v-model="ventadetalle.cantidad"
-            placeholder="Cantidad"
-            required
-          />
+          <input type="number" class="form-control" v-model="ventadetalle.cantidad" placeholder="Cantidad" required />
           <label for="cantidad">Cantidad</label>
         </div>
 
         <div class="form-floating mb-3">
-          <input
-            type="text"
-            class="form-control"
-            v-model="ventadetalle.subtotal"
-            placeholder="Subtotal"
-            required
-          />
+          <input type="number" class="form-control" v-model="ventadetalle.subtotal" placeholder="Subtotal" required />
           <label for="subtotal">Subtotal</label>
         </div>
 
         <div class="text-center mt-3">
           <button type="submit" class="btn btn-primary btn-lg">
-            <font-awesome-icon icon="fa-solid fa-save" title="Guardar" />
+            Guardar
           </button>
         </div>
       </form>
     </div>
+
     <div class="text-left">
       <button class="btn btn-link" @click="goBack">Volver</button>
     </div>

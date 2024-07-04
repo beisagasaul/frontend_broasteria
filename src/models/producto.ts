@@ -8,4 +8,5 @@ export interface Producto {
     precioUnitario:number
     stock: number;
     catagoria:Categoria;
+    fechaCreacion:Date;
   }
